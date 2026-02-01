@@ -88,25 +88,22 @@
 #define BRAKE_MOTOR_B  255
 
 // Setting the dead zone of poor quality joysticks TX for the motor controller
-#define DEAD_ZONE  15
-
-#define CH1_MOTOR_A  0
-#define CH2_MOTOR_B  1
-#define CH3_SERVO    2
-#define CH4_SERVO    3
-#define CH5_SERVO    4
-#define CH6_SERVO    5
-#define CH7_SERVO    6
-#define CH8_SERVO    7
+#define DEAD_ZONE        15
 
 #define MIN_CONTROL_VAL  1000
 #define MID_CONTROL_VAL  ((MIN_CONTROL_VAL + MAX_CONTROL_VAL) / 2)
 #define MAX_CONTROL_VAL  2000
 
-#define BIND_RF_ADDR      0xA4B7C123F7LL
+// Setting the number of motor A and B channels (max. 2)
+#define MOTOR_CHANNELS   2
 
-#define RC_CHANNELS       16 // The maximum number of RC channels that can be sent in one packet
-#define MIN_RC_CHANNELS   4  // The minimum number of channels that must be included in a packet
+// Setting the number of servo channels (max. 6)
+#define SERVO_CHANNELS   6
+
+#define RC_CHANNELS      (MOTOR_CHANNELS + SERVO_CHANNELS) // The maximum number of RC channels that can be sent in a single packet is 16.
+#define MIN_RC_CHANNELS  4  // The minimum number of channels that must be included in a packet
+
+#define BIND_RF_ADDR      0xA4B7C123F7LL
 
 #define RF_PAYLOAD_BYTES  24 // 12 bits per value * 16 channels
 
@@ -165,9 +162,9 @@ typedef struct
 RxTxPacket_t;   
 
 
-void attachServoPins();
-void outputServo();
-void outputPWM();
+void attach_servo_pins();
+void servo_control();
+void motor_control();
 void outputChannels();
 void ADC_Processing();
 void setupReciever();

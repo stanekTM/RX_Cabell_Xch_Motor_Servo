@@ -127,7 +127,7 @@ static void writeChan(uint8_t chan, int pulsewidth)
 static void initISR()
 {
   // channels start from 1 
-  for (uint8_t i=1; i <= NBR_CHANNELS; i++)
+  for (byte i = 1; i <= NBR_CHANNELS; i++)
   {
     writeChan(i, DEFAULT_PULSE_WIDTH); // store default values	    
 	}

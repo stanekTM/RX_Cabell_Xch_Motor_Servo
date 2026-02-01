@@ -77,77 +77,74 @@ RSSI rssi;
 
 
 // Create servo object -----------------------------------------------------------------------------------------------------
-ServoTimer2 servo1, servo2, servo3, servo4, servo5, servo6;
+ServoTimer2 servo[SERVO_CHANNELS];
 
-void attachServoPins()
+void attach_servo_pins()
 {
-  servo1.attach(PIN_SERVO_1);
-  servo2.attach(PIN_SERVO_2);
-  servo3.attach(PIN_SERVO_3);
-  servo4.attach(PIN_SERVO_4);
-  servo5.attach(PIN_SERVO_5);
-  servo6.attach(PIN_SERVO_6);
+  for (byte i = 0; i < SERVO_CHANNELS; i++)
+  {
+    servo[i].attach(pins_servo[i]);
+  }
 }
 
-void outputServo()
+void servo_control()
 {
-  servo1.write(channelValues[CH3_SERVO]);
-  servo2.write(channelValues[CH4_SERVO]);
-  servo3.write(channelValues[CH5_SERVO]);
-  servo4.write(channelValues[CH6_SERVO]);
-  servo5.write(channelValues[CH7_SERVO]);
-  servo6.write(channelValues[CH8_SERVO]);
+  for (byte i = 0; i < SERVO_CHANNELS; i++)
+  {
+    servo[i].write(channelValues[i]);
+  }
+  //Serial.println(channelValues[0]);
 }
 
 //--------------------------------------------------------------------------------------------------------------------------
-void outputPWM()
+void motor_control()
 {
   int motorA_val = 0, motorB_val = 0;
   
   // Forward motorA
-  if (channelValues[CH1_MOTOR_A] > MID_CONTROL_VAL + DEAD_ZONE)
+  if (channelValues[0] > MID_CONTROL_VAL + DEAD_ZONE)
   {
-    motorA_val = map(channelValues[CH1_MOTOR_A], MID_CONTROL_VAL + DEAD_ZONE, MAX_CONTROL_VAL, ACCELERATE_MOTOR_A, MAX_FORW_MOTOR_A);
+    motorA_val = map(channelValues[0], MID_CONTROL_VAL + DEAD_ZONE, MAX_CONTROL_VAL, ACCELERATE_MOTOR_A, MAX_FORW_MOTOR_A);
     motorA_val = constrain(motorA_val, ACCELERATE_MOTOR_A, MAX_FORW_MOTOR_A);
-    analogWrite(PIN_PWM_2_MOTOR_A, motorA_val); 
-    digitalWrite(PIN_PWM_1_MOTOR_A, LOW);
+    analogWrite(pins_motorA[1], motorA_val); 
+    digitalWrite(pins_motorA[0], LOW);
   }
   // Back motorA
-  else if (channelValues[CH1_MOTOR_A] < MID_CONTROL_VAL - DEAD_ZONE)
+  else if (channelValues[0] < MID_CONTROL_VAL - DEAD_ZONE)
   {
-    motorA_val = map(channelValues[CH1_MOTOR_A], MID_CONTROL_VAL - DEAD_ZONE, MIN_CONTROL_VAL, ACCELERATE_MOTOR_A, MAX_BACK_MOTOR_A);
+    motorA_val = map(channelValues[0], MID_CONTROL_VAL - DEAD_ZONE, MIN_CONTROL_VAL, ACCELERATE_MOTOR_A, MAX_BACK_MOTOR_A);
     motorA_val = constrain(motorA_val, ACCELERATE_MOTOR_A, MAX_BACK_MOTOR_A);
-    analogWrite(PIN_PWM_1_MOTOR_A, motorA_val);
-    digitalWrite(PIN_PWM_2_MOTOR_A, LOW);
+    analogWrite(pins_motorA[0], motorA_val);
+    digitalWrite(pins_motorA[1], LOW);
   }
   else
   {
-    analogWrite(PIN_PWM_1_MOTOR_A, BRAKE_MOTOR_A);
-    analogWrite(PIN_PWM_2_MOTOR_A, BRAKE_MOTOR_A);
+    analogWrite(pins_motorA[0], BRAKE_MOTOR_A);
+    analogWrite(pins_motorA[1], BRAKE_MOTOR_A);
   }
   //Serial.println(motorA_val);
   
   
   // Forward motorB
-  if (channelValues[CH2_MOTOR_B] > MID_CONTROL_VAL + DEAD_ZONE)
+  if (channelValues[1] > MID_CONTROL_VAL + DEAD_ZONE)
   {
-    motorB_val = map(channelValues[CH2_MOTOR_B], MID_CONTROL_VAL + DEAD_ZONE, MAX_CONTROL_VAL, ACCELERATE_MOTOR_B, MAX_FORW_MOTOR_B);
+    motorB_val = map(channelValues[1], MID_CONTROL_VAL + DEAD_ZONE, MAX_CONTROL_VAL, ACCELERATE_MOTOR_B, MAX_FORW_MOTOR_B);
     motorB_val = constrain(motorB_val, ACCELERATE_MOTOR_B, MAX_FORW_MOTOR_B);
-    analogWrite(PIN_PWM_4_MOTOR_B, motorB_val);
-    digitalWrite(PIN_PWM_3_MOTOR_B, LOW);
+    analogWrite(pins_motorB[1], motorB_val);
+    digitalWrite(pins_motorB[0], LOW);
   }
   // Back motorB
-  else if (channelValues[CH2_MOTOR_B] < MID_CONTROL_VAL - DEAD_ZONE)
+  else if (channelValues[1] < MID_CONTROL_VAL - DEAD_ZONE)
   {
-    motorB_val = map(channelValues[CH2_MOTOR_B], MID_CONTROL_VAL - DEAD_ZONE, MIN_CONTROL_VAL, ACCELERATE_MOTOR_B, MAX_BACK_MOTOR_B);
+    motorB_val = map(channelValues[1], MID_CONTROL_VAL - DEAD_ZONE, MIN_CONTROL_VAL, ACCELERATE_MOTOR_B, MAX_BACK_MOTOR_B);
     motorB_val = constrain(motorB_val, ACCELERATE_MOTOR_B, MAX_BACK_MOTOR_B);
-    analogWrite(PIN_PWM_3_MOTOR_B, motorB_val);
-    digitalWrite(PIN_PWM_4_MOTOR_B, LOW);
+    analogWrite(pins_motorB[0], motorB_val);
+    digitalWrite(pins_motorB[1], LOW);
   }
   else
   {
-    analogWrite(PIN_PWM_3_MOTOR_B, BRAKE_MOTOR_B);
-    analogWrite(PIN_PWM_4_MOTOR_B, BRAKE_MOTOR_B);
+    analogWrite(pins_motorB[0], BRAKE_MOTOR_B);
+    analogWrite(pins_motorB[1], BRAKE_MOTOR_B);
   }
   //Serial.println(motorB_val);
 }
@@ -155,8 +152,8 @@ void outputPWM()
 //--------------------------------------------------------------------------------------------------------------------------
 void outputChannels()
 {
-  outputServo();
-  outputPWM();
+  servo_control();
+  motor_control();
 }
 
 //--------------------------------------------------------------------------------------------------------------------------
@@ -440,9 +437,9 @@ void outputFailSafeValues(bool callOutputChannels)
 {
   loadFailSafeDefaultValues();
   
-  for (uint8_t x = 0; x < RC_CHANNELS; x++)
+  for (byte i = 0; i < RC_CHANNELS; i++)
   {
-    channelValues[x] = failSafeChannelValues[x];
+    channelValues[i] = failSafeChannelValues[i];
   }
   
   if (!failSafeMode)
@@ -462,9 +459,9 @@ void unbindReciever()
   uint8_t value = 0xFF;
   
   // Reset all of flash memory to unbind receiver
-  for (int x = 0; x < 1024; x++)
+  for (int i = 0; i < 1024; i++)
   {
-    EEPROM.put(x, value);
+    EEPROM.put(i, value);
   }
   
   outputFailSafeValues(true);
@@ -526,9 +523,9 @@ void setFailSafeDefaultValues()
 {
   uint16_t defaultFailSafeValues[RC_CHANNELS];
   
-  for (int x = 0; x < RC_CHANNELS; x++)
+  for (int i = 0; i < RC_CHANNELS; i++)
   {
-    defaultFailSafeValues[x] = MID_CONTROL_VAL;
+    defaultFailSafeValues[i] = MID_CONTROL_VAL;
   }
   
   setFailSafeValues(defaultFailSafeValues);
@@ -539,12 +536,12 @@ void loadFailSafeDefaultValues()
 {
   EEPROM.get(failSafeChannelValuesEEPROMAddress, failSafeChannelValues);
   
-  for (int x = 0; x < RC_CHANNELS; x++)
+  for (int i = 0; i < RC_CHANNELS; i++)
   {
     // Make sure failsafe values are valid
-    if (failSafeChannelValues[x] < MIN_CONTROL_VAL || failSafeChannelValues[x] > MAX_CONTROL_VAL)
+    if (failSafeChannelValues[i] < MIN_CONTROL_VAL || failSafeChannelValues[i] > MAX_CONTROL_VAL)
     {
-      failSafeChannelValues[x] = MID_CONTROL_VAL;
+      failSafeChannelValues[i] = MID_CONTROL_VAL;
     }
   }
 }
@@ -552,9 +549,9 @@ void loadFailSafeDefaultValues()
 //--------------------------------------------------------------------------------------------------------------------------
 void setFailSafeValues(uint16_t newFailsafeValues[])
 {
-  for (int x = 0; x < RC_CHANNELS; x++)
+  for (int i = 0; i < RC_CHANNELS; i++)
   {
-    failSafeChannelValues[x] = newFailsafeValues[x];
+    failSafeChannelValues[i] = newFailsafeValues[i];
   }
   
   EEPROM.put(failSafeChannelValuesEEPROMAddress, failSafeChannelValues);
@@ -566,9 +563,9 @@ bool validateChecksum(RxTxPacket_t const& packet, uint8_t maxPayloadValueIndex)
   // Caculate checksum and validate
   uint16_t packetSum = packet.modelNum + packet.option + packet.RxMode + packet.reserved;
   
-  for (int x = 0; x < maxPayloadValueIndex; x++)
+  for (int i = 0; i < maxPayloadValueIndex; i++)
   {
-    packetSum = packetSum +  packet.payloadValue[x];
+    packetSum = packetSum +  packet.payloadValue[i];
   }
   
   if (packetSum != ((((uint16_t)packet.checkSum_MSB) << 8) + (uint16_t)packet.checkSum_LSB))
@@ -638,9 +635,9 @@ bool readAndProcessPacket()
   // If packet is good, copy the channel values
   if (packet_rx)
   {
-    for (int b = 0 ; b < RC_CHANNELS; b++)
+    for (int i = 0 ; i < RC_CHANNELS; i++)
     {
-      channelValues[b] = (b < channelsRecieved) ? tempHoldValues[b] : MID_CONTROL_VAL; // Use the mid value for channels not received
+      channelValues[i] = (i < channelsRecieved) ? tempHoldValues[i] : MID_CONTROL_VAL; // Use the mid value for channels not received
     }
   }
   
@@ -733,25 +730,25 @@ bool decodeChannelValues(RxTxPacket_t const& RxPacket, uint8_t channelsRecieved,
   int payloadIndex = 0;
   
   // Decode the 12 bit numbers to temp array
-  for (int b = 0; (b < channelsRecieved); b++)
+  for (int i = 0; (i < channelsRecieved); i++)
   {
-    tempHoldValues[b]  = RxPacket.payloadValue[payloadIndex];
+    tempHoldValues[i]  = RxPacket.payloadValue[payloadIndex];
     payloadIndex++;
-    tempHoldValues[b] |= ((uint16_t)RxPacket.payloadValue[payloadIndex]) << 8;
+    tempHoldValues[i] |= ((uint16_t)RxPacket.payloadValue[payloadIndex]) << 8;
     
     // Channel number is ODD
-    if (b % 2)
+    if (i % 2)
     {
-      tempHoldValues[b] = tempHoldValues[b] >> 4;
+      tempHoldValues[i] = tempHoldValues[i] >> 4;
       payloadIndex++;
     }
     // Channel number is EVEN
     else
     {
-      tempHoldValues[b] &= 0x0FFF;
+      tempHoldValues[i] &= 0x0FFF;
     }
     
-    if ((tempHoldValues[b] > MAX_CONTROL_VAL) || (tempHoldValues[b] < MIN_CONTROL_VAL))
+    if ((tempHoldValues[i] > MAX_CONTROL_VAL) || (tempHoldValues[i] < MIN_CONTROL_VAL))
     {
       packet_rx = false; // Throw out entire packet if any value out of range
     }

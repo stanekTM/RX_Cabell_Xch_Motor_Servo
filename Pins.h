@@ -70,26 +70,23 @@
 //          MOSI               17 // A3
 //          MISO               18 // A4
 
-#define PIN_SERVO_1            2
-#define PIN_SERVO_2            3
-#define PIN_SERVO_3            4
-#define PIN_SERVO_4            7
-#define PIN_SERVO_5            8
-#define PIN_SERVO_6            11
-     
-#define PIN_PWM_1_MOTOR_A      5
-#define PIN_PWM_2_MOTOR_A      6
-#define PIN_PWM_3_MOTOR_B      9
-#define PIN_PWM_4_MOTOR_B      10
+// Pins for servos (possible combination, max. 6)
+const byte pins_servo[] = {2, 3, 4, 7, 8, 11};
+
+// PWM pins for motor A (possible combination, max. 2)
+const byte pins_motorA[] = {5, 6};
+
+// PWM pins for motor B (possible combination, max. 2)
+const byte pins_motorB[] = {9, 10};
 
 #define PIN_BUTTON_BIND        12
 #define PIN_LED                13
 
-#define PIN_RX_BATT_A1         6  // A6 - 20
-#define PIN_RX_BATT_A2         7  // A7 - 21
+#define PIN_RX_BATT_A1         A6
+#define PIN_RX_BATT_A2         A7
 
 // Configure A5 for radio IRQ 
-#define RADIO_IRQ_PIN          A5 // 19
+#define RADIO_IRQ_PIN          A5
 #define RADIO_IRQ_PIN_bit      5  // PC5
 #define RADIO_IRQ_port         PORTC
 #define RADIO_IRQ_ipr          PINC

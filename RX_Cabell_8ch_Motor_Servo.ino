@@ -59,10 +59,10 @@ void setup(void)
 {
   //Serial.begin(9600);
   
-  pinMode(PIN_PWM_1_MOTOR_A, OUTPUT);
-  pinMode(PIN_PWM_2_MOTOR_A, OUTPUT);
-  pinMode(PIN_PWM_3_MOTOR_B, OUTPUT);
-  pinMode(PIN_PWM_4_MOTOR_B, OUTPUT);
+  pinMode(pins_motorA[0], OUTPUT);
+  pinMode(pins_motorA[1], OUTPUT);
+  pinMode(pins_motorB[0], OUTPUT);
+  pinMode(pins_motorB[1], OUTPUT);
   
   pinMode(PIN_BUTTON_BIND, INPUT_PULLUP);
   
@@ -70,8 +70,8 @@ void setup(void)
   digitalWrite(PIN_LED, LOW);
   
   // Setting the motor frequency
-  setPWMPrescaler(PIN_PWM_1_MOTOR_A, PWM_MOTOR_A);
-  setPWMPrescaler(PIN_PWM_3_MOTOR_B, PWM_MOTOR_B);
+  setPWMPrescaler(pins_motorA[0], PWM_MOTOR_A);
+  setPWMPrescaler(pins_motorB[0], PWM_MOTOR_B);
   
   // Initial analog reads for A6/A7. Initial call returns bad value so call 3 times to get a good starting value from each pin
   ADC_Processing();
@@ -83,7 +83,7 @@ void setup(void)
   ADC_Processing();
   
   setupReciever();
-  attachServoPins();
+  attach_servo_pins();
 }
 
 //*********************************************************************************************************************

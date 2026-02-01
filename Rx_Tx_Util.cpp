@@ -47,11 +47,11 @@ uint8_t getNextChannel (uint8_t seqArray[], uint8_t seqArraySize, uint8_t prevCh
   uint8_t prevChannalSeqArrayPosition = 0;
   
   // Find the position of the previous channel in the array
-  for (int x = 0; x < seqArraySize; x++)
+  for (int i = 0; i < seqArraySize; i++)
   {
-    if (seqArray[x] == prevChannalSeqArrayValue)
+    if (seqArray[i] == prevChannalSeqArrayValue)
     {
-      prevChannalSeqArrayPosition = x;
+      prevChannalSeqArrayPosition = i;
     }
   }
    
