@@ -87,6 +87,6 @@ void RSSI::resetCounters()
 //--------------------------------------------------------------------------------------------------------------------------
 uint8_t RSSI::getRSSI()
 {
- return constrain(packetRate - sequentialMissTrack, TELEMETRY_RSSI_MIN_VALUE, TELEMETRY_RSSI_MAX_VALUE);
+  return constrain(packetRate - sequentialMissTrack, TELEMETRY_RSSI_MIN_VALUE, TELEMETRY_RSSI_MAX_VALUE);
 }
  

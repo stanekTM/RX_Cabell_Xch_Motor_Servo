@@ -37,7 +37,7 @@
 // 64 = 976Hz(default)
 // 8 = 7812Hz
 // 1 = 62500Hz
-#define PWM_MOTOR_A  256
+#define PWM_MOTOR_A  64
 
 // Pin D9 and D10 (16-bit Timer/Counter 1, Servo library)
 // 1024 = 30Hz
@@ -45,7 +45,7 @@
 // 64 = 488Hz(default)
 // 8 = 3906Hz
 // 1 = 31250Hz
-#define PWM_MOTOR_B  256
+//#define PWM_MOTOR_B  256
 
 // Pin D3 and D11 (8-bit Timer/Counter 2, ServoTimer2, Tone library)
 // 1024 = 30Hz
@@ -55,7 +55,7 @@
 // 32 = 976Hz
 // 8 = 3906Hz
 // 1 = 31250Hz
-//#define PWM_MOTOR_B  256
+#define PWM_MOTOR_B  64
 
 // Pin D0(RX) (328PB 16-bit Timer/Counter 3)
 // 1024 = 30Hz
@@ -78,14 +78,14 @@
 #define ACCELERATE_MOTOR_B  0
 
 // Setting the maximum motor power. Suitable for TX transmitters without endpoint setting. Settings (0-255)
-#define MAX_FORW_MOTOR_A  255
-#define MAX_BACK_MOTOR_A  255
-#define MAX_FORW_MOTOR_B  255
-#define MAX_BACK_MOTOR_B  255
+#define MAX_FORWARD_MOTOR_A  255
+#define MAX_REVERSE_MOTOR_A  255
+#define MAX_FORWARD_MOTOR_B  255
+#define MAX_REVERSE_MOTOR_B  255
 
 // Brake setting, no brake 0, maximum brake 255. Settings (0-255)
-#define BRAKE_MOTOR_A  255
-#define BRAKE_MOTOR_B  255
+#define BRAKE_MOTOR_A  0
+#define BRAKE_MOTOR_B  0
 
 // Setting the dead zone of poor quality joysticks TX for the motor controller
 #define DEAD_ZONE        15
@@ -94,18 +94,42 @@
 #define MID_CONTROL_VAL  ((MIN_CONTROL_VAL + MAX_CONTROL_VAL) / 2)
 #define MAX_CONTROL_VAL  2000
 
-// Setting the number of motor A and B channels (max. 2)
-#define MOTOR_CHANNELS   2
+//*********************************************************************************************************************
+// Uncomment only one output option that combines motors, servos and pins.
+// (e.g. uncomment only output for 1 motor, no output for servos)
+//*********************************************************************************************************************
+//#define MOTOR_A
+//#define MOTOR_B
+//#define SERVO_8CH
+//#define SERVO_7CH_MOTOR_A
+//#define SERVO_7CH_MOTOR_B
+#define SERVO_6CH_MOTOR_AB
 
-// Setting the number of servo channels (max. 6)
-#define SERVO_CHANNELS   6
+#if defined(SERVO_8CH)
+  #define SERVO_CHANNELS  8
+#endif
 
-#define RC_CHANNELS      (MOTOR_CHANNELS + SERVO_CHANNELS) // The maximum number of RC channels that can be sent in a single packet is 16.
-#define MIN_RC_CHANNELS  4  // The minimum number of channels that must be included in a packet
+#if defined(SERVO_7CH_MOTOR_A)
+  #define SERVO_CHANNELS  7
+  #define MOTOR_A
+#endif
+
+#if defined(SERVO_7CH_MOTOR_B)
+  #define SERVO_CHANNELS  7
+  #define MOTOR_B
+#endif
+
+#if defined(SERVO_6CH_MOTOR_AB)
+  #define SERVO_CHANNELS  6
+  #define MOTOR_A
+  #define MOTOR_B
+#endif
+
+#define MAX_RC_CHANNELS   16 // The maximum number of RC channels that can be sent in one packet
+#define MIN_RC_CHANNELS   4  // The minimum number of channels that must be included in a packet, the number of channels cannot be reduced any further than this
+#define RF_PAYLOAD_BYTES  24 // 12 bits per value * 16 channels
 
 #define BIND_RF_ADDR      0xA4B7C123F7LL
-
-#define RF_PAYLOAD_BYTES  24 // 12 bits per value * 16 channels
 
 #define RF_CHANNELS       9 // This is 1/5 of the total number of radio channels used for FHSS
 #define MIN_RF_CHANNEL    3 // Channel 0 is right on the boarder of allowed frequency range, so move up to avoid bleeding over
@@ -143,21 +167,15 @@ typedef struct
   }
   RxMode;
   
-  uint8_t reserved = 0; /* Contains the channel number that the packet was sent on in bits 0-5 */
-  uint8_t option;       /*   mask 0x0F    : Channel reduction.  The number of channels to not send (subtracted from the 16 max channels) at least 4 are always sent
-                         *   mask 0x30>>4 : Receiver output mode
-                         *                  0 (00) = Single PPM on individual pins for each channel 
-                         *                  1 (01) = SUM PPM on channel 1 pin
-                         *                  2 (10) = SBUS output
-                         *                  3 (11) = Unused
-                         *   mask 0x40>>6   Contains max power override flag for Multi-protocol TX module. Also sent to RX
-                         *   mask 0x80>>7   Unused 
-                         */
-  uint8_t  modelNum;
-  uint8_t  checkSum_LSB;  // Checksum least significant byte
-  uint8_t  checkSum_MSB;  // Checksum most significant byte
-  uint8_t  payloadValue[RF_PAYLOAD_BYTES] = {0}; // 12 bits per channel value, unsigned
+  uint8_t reserved = 0; // Contains the channel number that the packet was sent on in bits 0-5
   
+  uint8_t option; // mask 0x0F    : Channel reduction.  The number of channels to not send (subtracted from the 16 max channels) at least 4 are always sent
+  //                 mask 0x40>>6 : Contains max power override flag for Multi-protocol TX module. Also sent to RX
+  
+  uint8_t  modelNum;
+  uint8_t  checkSum_LSB; // Checksum least significant byte
+  uint8_t  checkSum_MSB; // Checksum most significant byte
+  uint8_t  payloadValue[RF_PAYLOAD_BYTES] = {0}; // 12 bits per channel value, unsigned
 }
 RxTxPacket_t;   
 
@@ -165,7 +183,7 @@ RxTxPacket_t;
 void attach_servo_pins();
 void servo_control();
 void motor_control();
-void outputChannels();
+void output_rc_channels();
 void ADC_Processing();
 void setupReciever();
 void setNextRadioChannel(bool missedPacket);
@@ -184,7 +202,7 @@ bool decodeChannelValues(RxTxPacket_t const& RxPacket, uint8_t channelsRecieved,
 unsigned long sendTelemetryPacket(); // Returns micros of when the transmit is expected to be complete
 bool failSafeButtonHeld();
 void setTelemetryPowerMode(uint8_t option);
-void initializeRadio(My_RF24* radio);
+void initializeRadio();
 
 #endif
  

@@ -2,7 +2,7 @@
   *******************************************************************************************************************
   RC receiver with "Cabell" protocol
   **********************************
-  RC receiver from my repository https://github.com/stanekTM/RX_Cabell_8ch_Motor_Servo
+  RC receiver from my repository https://github.com/stanekTM/RX_Cabell_Xch_Motor_Servo
   
   Includes nRF24L01+ transceiver and ATmega328P/PB processor for PWM motor control or servo outputs and telemetry.
   
@@ -10,9 +10,7 @@
   OpenAVRc      https://github.com/Ingwie/OpenAVRc_Dev
   Multiprotocol https://github.com/pascallanger/DIY-Multiprotocol-TX-Module
   *******************************************************************************************************************
-*/
-
-/*
+  
   Copyright 2017 by Dennis Cabell
   KE8FZX
   
@@ -38,40 +36,37 @@
   along with RC_RX_CABELL_V3_FHSS.  If not, see http://www.gnu.org/licenses.
 */
 
-/*
-  Library dependencies:
-  
-  Aaduino Core, SPI, and EEPROM
-  
-  https://github.com/nRF24/RF24 library copied and modified to streamline
-  opeerations specific to this application in order to improve loop timing.
-  See http://tmrh20.github.io/RF24  for documentation on the standard version of the library.
-  
-  Arduino Servo was modified and is included with this source.  It was changed to not directly define the Timer 1 ISR
-*/
-
 #include "RX.h"
 #include "Pins.h"
 #include "PWM_Frequency.h"
 
 //*********************************************************************************************************************
+// Program setup
+//*********************************************************************************************************************
 void setup(void)
 {
   //Serial.begin(9600);
-  
+
+#if defined(MOTOR_A)
   pinMode(pins_motorA[0], OUTPUT);
   pinMode(pins_motorA[1], OUTPUT);
+  setPWMPrescaler(pins_motorA[0], PWM_MOTOR_A); // Setting the motor A frequency
+#endif
+
+#if defined(MOTOR_B)
   pinMode(pins_motorB[0], OUTPUT);
   pinMode(pins_motorB[1], OUTPUT);
-  
+  setPWMPrescaler(pins_motorB[0], PWM_MOTOR_B); // Setting the motor B frequency
+#endif
+
+#if defined(SERVO_8CH) || defined(SERVO_7CH_MOTOR_A) || defined(SERVO_7CH_MOTOR_B) || defined(SERVO_6CH_MOTOR_AB)
+  attach_servo_pins();
+#endif
+
   pinMode(PIN_BUTTON_BIND, INPUT_PULLUP);
   
   pinMode(PIN_LED, OUTPUT);
   digitalWrite(PIN_LED, LOW);
-  
-  // Setting the motor frequency
-  setPWMPrescaler(pins_motorA[0], PWM_MOTOR_A);
-  setPWMPrescaler(pins_motorB[0], PWM_MOTOR_B);
   
   // Initial analog reads for A6/A7. Initial call returns bad value so call 3 times to get a good starting value from each pin
   ADC_Processing();
@@ -83,9 +78,10 @@ void setup(void)
   ADC_Processing();
   
   setupReciever();
-  attach_servo_pins();
 }
 
+//*********************************************************************************************************************
+// Program loop
 //*********************************************************************************************************************
 void loop()
 {
@@ -94,7 +90,7 @@ void loop()
     // Loop forever without going back to Arduino core code
     if (getPacket())
     {
-      outputChannels();
+      output_rc_channels();
     }
     
     ADC_Processing(); // Process ADC to asynchronously read A6/A7 for telemetry analog values. Non-blocking read

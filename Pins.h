@@ -61,23 +61,35 @@
 // ADC6   -    A6
 // ADC7   -    A7
 
-// Pins for nRF24L01+
-#define PIN_CE                 14 // A0
-#define PIN_CSN                15 // A1
-
-// Software SPI https://nrf24.github.io/RF24/md_docs_2arduino.html
-//          SCK                16 // A2
-//          MOSI               17 // A3
-//          MISO               18 // A4
-
-// Pins for servos (possible combination, max. 6)
-const byte pins_servo[] = {2, 3, 4, 7, 8, 11};
-
 // PWM pins for motor A (possible combination, max. 2)
+#if defined(MOTOR_A)
 const byte pins_motorA[] = {5, 6};
+#endif
 
 // PWM pins for motor B (possible combination, max. 2)
-const byte pins_motorB[] = {9, 10};
+#if defined(MOTOR_B)
+const byte pins_motorB[] = {3, 11};
+#endif
+
+// Pins for servos (possible combination, max. 8)
+#if defined(SERVO_8CH)
+const byte pins_servo[] = {2, 3, 4, 5, 6, 7, 8, 9};
+#endif
+
+// Pins for servos (possible combination, max. 7)
+#if defined(SERVO_7CH_MOTOR_A)
+const byte pins_servo[] = {2, 3, 4, 7, 8, 9, 10};
+#endif
+
+// Pins for servos (possible combination, max. 7)
+#if defined(SERVO_7CH_MOTOR_B)
+const byte pins_servo[] = {2, 4, 5, 6, 7, 8, 9};
+#endif
+
+// Pins for servos (possible combination, max. 6)
+#if defined(SERVO_6CH_MOTOR_AB)
+const byte pins_servo[] = {2, 4, 7, 8, 9, 10};
+#endif
 
 #define PIN_BUTTON_BIND        12
 #define PIN_LED                13
@@ -85,9 +97,18 @@ const byte pins_motorB[] = {9, 10};
 #define PIN_RX_BATT_A1         A6
 #define PIN_RX_BATT_A2         A7
 
-// Configure A5 for radio IRQ 
+// Pins for nRF24L01+
+#define PIN_CE                 A0
+#define PIN_CSN                A1
+
+// Software SPI https://nrf24.github.io/RF24/md_docs_2arduino.html
+//          SCK                A2
+//          MOSI               A3
+//          MISO               A4
+
+// Configuring pin A5 for radio IRQ 
 #define RADIO_IRQ_PIN          A5
-#define RADIO_IRQ_PIN_bit      5  // PC5
+#define RADIO_IRQ_PIN_bit      5 // PC5
 #define RADIO_IRQ_port         PORTC
 #define RADIO_IRQ_ipr          PINC
 #define RADIO_IRQ_ddr          DDRC
