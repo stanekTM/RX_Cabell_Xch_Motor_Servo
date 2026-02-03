@@ -47,19 +47,19 @@ void setup(void)
 {
   //Serial.begin(9600);
 
-#if defined(MOTOR_A)
-  pinMode(pins_motorA[0], OUTPUT);
-  pinMode(pins_motorA[1], OUTPUT);
-  setPWMPrescaler(pins_motorA[0], PWM_MOTOR_A); // Setting the motor A frequency
+#if defined(MOTOR1)
+  pinMode(pins_motor1[0], OUTPUT);
+  pinMode(pins_motor1[1], OUTPUT);
+  setPWMPrescaler(pins_motor1[0], PWM_MOTOR1); // Setting the motor 1 frequency
 #endif
 
-#if defined(MOTOR_B)
-  pinMode(pins_motorB[0], OUTPUT);
-  pinMode(pins_motorB[1], OUTPUT);
-  setPWMPrescaler(pins_motorB[0], PWM_MOTOR_B); // Setting the motor B frequency
+#if defined(MOTOR2)
+  pinMode(pins_motor2[0], OUTPUT);
+  pinMode(pins_motor2[1], OUTPUT);
+  setPWMPrescaler(pins_motor2[0], PWM_MOTOR2); // Setting the motor 2 frequency
 #endif
 
-#if defined(SERVO_8CH) || defined(SERVO_7CH_MOTOR_A) || defined(SERVO_7CH_MOTOR_B) || defined(SERVO_6CH_MOTOR_AB)
+#if defined(SERVO_8CH) || defined(SERVO_7CH_MOTOR1) || defined(SERVO_7CH_MOTOR2) || defined(SERVO_6CH_MOTOR12)
   attach_servo_pins();
 #endif
 

@@ -61,14 +61,14 @@
 // ADC6   -    A6
 // ADC7   -    A7
 
-// PWM pins for motor A (possible combination, max. 2)
-#if defined(MOTOR_A)
-const byte pins_motorA[] = {5, 6};
+// PWM pins for motor 1 (possible combination, max. 2)
+#if defined(MOTOR1)
+const byte pins_motor1[] = {5, 6};
 #endif
 
-// PWM pins for motor B (possible combination, max. 2)
-#if defined(MOTOR_B)
-const byte pins_motorB[] = {3, 11};
+// PWM pins for motor 2 (possible combination, max. 2)
+#if defined(MOTOR2)
+const byte pins_motor2[] = {3, 11};
 #endif
 
 // Pins for servos (possible combination, max. 8)
@@ -77,17 +77,17 @@ const byte pins_servo[] = {2, 3, 4, 5, 6, 7, 8, 9};
 #endif
 
 // Pins for servos (possible combination, max. 7)
-#if defined(SERVO_7CH_MOTOR_A)
+#if defined(SERVO_7CH_MOTOR1)
 const byte pins_servo[] = {2, 3, 4, 7, 8, 9, 10};
 #endif
 
 // Pins for servos (possible combination, max. 7)
-#if defined(SERVO_7CH_MOTOR_B)
+#if defined(SERVO_7CH_MOTOR2)
 const byte pins_servo[] = {2, 4, 5, 6, 7, 8, 9};
 #endif
 
 // Pins for servos (possible combination, max. 6)
-#if defined(SERVO_6CH_MOTOR_AB)
+#if defined(SERVO_6CH_MOTOR12)
 const byte pins_servo[] = {2, 4, 7, 8, 9, 10};
 #endif
 

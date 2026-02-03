@@ -32,7 +32,7 @@
 #include "RSSI.h"
 #include "Rx_Tx_Util.h"
 #include <EEPROM.h>
-#include <Servo.h>
+#include <Servo.h>     // v1.2.2
 #include <DigitalIO.h> // v1.0.1
 
 My_RF24 radio(PIN_CE, PIN_CSN);
@@ -76,7 +76,7 @@ uint16_t rc_channel_val[MAX_RC_CHANNELS];
 //*********************************************************************************************************************
 // Attach servo pins
 //*********************************************************************************************************************
-#if defined(SERVO_8CH) || defined(SERVO_7CH_MOTOR_A) || defined(SERVO_7CH_MOTOR_B) || defined(SERVO_6CH_MOTOR_AB)
+#if defined(SERVO_8CH) || defined(SERVO_7CH_MOTOR1) || defined(SERVO_7CH_MOTOR2) || defined(SERVO_6CH_MOTOR12)
 Servo servo[SERVO_CHANNELS]; // Create servo object
 
 void attach_servo_pins()
@@ -104,7 +104,7 @@ void servo_control()
   servo[7].writeMicroseconds(rc_channel_val[7]);
 #endif
 
-#if defined(SERVO_7CH_MOTOR_A)
+#if defined(SERVO_7CH_MOTOR1)
   servo[0].writeMicroseconds(rc_channel_val[1]);
   servo[1].writeMicroseconds(rc_channel_val[2]);
   servo[2].writeMicroseconds(rc_channel_val[3]);
@@ -114,7 +114,7 @@ void servo_control()
   servo[6].writeMicroseconds(rc_channel_val[7]);
 #endif
 
-#if defined(SERVO_7CH_MOTOR_B)
+#if defined(SERVO_7CH_MOTOR2)
   servo[0].writeMicroseconds(rc_channel_val[0]);
   servo[1].writeMicroseconds(rc_channel_val[2]);
   servo[2].writeMicroseconds(rc_channel_val[3]);
@@ -124,7 +124,7 @@ void servo_control()
   servo[6].writeMicroseconds(rc_channel_val[7]);
 #endif
 
-#if defined(SERVO_6CH_MOTOR_AB)
+#if defined(SERVO_6CH_MOTOR12)
   servo[0].writeMicroseconds(rc_channel_val[2]);
   servo[1].writeMicroseconds(rc_channel_val[3]);
   servo[2].writeMicroseconds(rc_channel_val[4]);
@@ -139,56 +139,56 @@ void servo_control()
 //*********************************************************************************************************************
 void motor_control()
 {
-  int motorA_val = 0, motorB_val = 0;
+  int motor1_val = 0, motor2_val = 0;
 
-#if defined(MOTOR_A)
-  // Forward motorA
+#if defined(MOTOR1)
+  // Forward motor 1
   if (rc_channel_val[0] > MID_CONTROL_VAL + DEAD_ZONE)
   {
-    motorA_val = map(rc_channel_val[0], MID_CONTROL_VAL + DEAD_ZONE, MAX_CONTROL_VAL, ACCELERATE_MOTOR_A, MAX_FORWARD_MOTOR_A);
-    motorA_val = constrain(motorA_val, ACCELERATE_MOTOR_A, MAX_FORWARD_MOTOR_A);
-    analogWrite(pins_motorA[1], motorA_val); 
-    digitalWrite(pins_motorA[0], LOW);
+    motor1_val = map(rc_channel_val[0], MID_CONTROL_VAL + DEAD_ZONE, MAX_CONTROL_VAL, ACCELERATE_MOTOR1, MAX_FORWARD_MOTOR1);
+    motor1_val = constrain(motor1_val, ACCELERATE_MOTOR1, MAX_FORWARD_MOTOR1);
+    analogWrite(pins_motor1[1], motor1_val); 
+    digitalWrite(pins_motor1[0], LOW);
   }
-  // Reverse motorA
+  // Reverse motor 1
   else if (rc_channel_val[0] < MID_CONTROL_VAL - DEAD_ZONE)
   {
-    motorA_val = map(rc_channel_val[0], MID_CONTROL_VAL - DEAD_ZONE, MIN_CONTROL_VAL, ACCELERATE_MOTOR_A, MAX_REVERSE_MOTOR_A);
-    motorA_val = constrain(motorA_val, ACCELERATE_MOTOR_A, MAX_REVERSE_MOTOR_A);
-    analogWrite(pins_motorA[0], motorA_val);
-    digitalWrite(pins_motorA[1], LOW);
+    motor1_val = map(rc_channel_val[0], MID_CONTROL_VAL - DEAD_ZONE, MIN_CONTROL_VAL, ACCELERATE_MOTOR1, MAX_REVERSE_MOTOR1);
+    motor1_val = constrain(motor1_val, ACCELERATE_MOTOR1, MAX_REVERSE_MOTOR1);
+    analogWrite(pins_motor1[0], motor1_val);
+    digitalWrite(pins_motor1[1], LOW);
   }
   else
   {
-    analogWrite(pins_motorA[0], BRAKE_MOTOR_A);
-    analogWrite(pins_motorA[1], BRAKE_MOTOR_A);
+    analogWrite(pins_motor1[0], BRAKE_MOTOR1);
+    analogWrite(pins_motor1[1], BRAKE_MOTOR1);
   }
-  //Serial.println(motorA_val);
+  //Serial.println(motor1_val);
 #endif
 
-#if defined(MOTOR_B)
-  // Forward motorB
+#if defined(MOTOR2)
+  // Forward motor 2
   if (rc_channel_val[1] > MID_CONTROL_VAL + DEAD_ZONE)
   {
-    motorB_val = map(rc_channel_val[1], MID_CONTROL_VAL + DEAD_ZONE, MAX_CONTROL_VAL, ACCELERATE_MOTOR_B, MAX_FORWARD_MOTOR_B);
-    motorB_val = constrain(motorB_val, ACCELERATE_MOTOR_B, MAX_FORWARD_MOTOR_B);
-    analogWrite(pins_motorB[1], motorB_val);
-    digitalWrite(pins_motorB[0], LOW);
+    motor2_val = map(rc_channel_val[1], MID_CONTROL_VAL + DEAD_ZONE, MAX_CONTROL_VAL, ACCELERATE_MOTOR2, MAX_FORWARD_MOTOR2);
+    motor2_val = constrain(motor2_val, ACCELERATE_MOTOR2, MAX_FORWARD_MOTOR2);
+    analogWrite(pins_motor2[1], motor2_val);
+    digitalWrite(pins_motor2[0], LOW);
   }
-  // Reverse motorB
+  // Reverse motor 2
   else if (rc_channel_val[1] < MID_CONTROL_VAL - DEAD_ZONE)
   {
-    motorB_val = map(rc_channel_val[1], MID_CONTROL_VAL - DEAD_ZONE, MIN_CONTROL_VAL, ACCELERATE_MOTOR_B, MAX_REVERSE_MOTOR_B);
-    motorB_val = constrain(motorB_val, ACCELERATE_MOTOR_B, MAX_REVERSE_MOTOR_B);
-    analogWrite(pins_motorB[0], motorB_val);
-    digitalWrite(pins_motorB[1], LOW);
+    motor2_val = map(rc_channel_val[1], MID_CONTROL_VAL - DEAD_ZONE, MIN_CONTROL_VAL, ACCELERATE_MOTOR2, MAX_REVERSE_MOTOR2);
+    motor2_val = constrain(motor2_val, ACCELERATE_MOTOR2, MAX_REVERSE_MOTOR2);
+    analogWrite(pins_motor2[0], motor2_val);
+    digitalWrite(pins_motor2[1], LOW);
   }
   else
   {
-    analogWrite(pins_motorB[0], BRAKE_MOTOR_B);
-    analogWrite(pins_motorB[1], BRAKE_MOTOR_B);
+    analogWrite(pins_motor2[0], BRAKE_MOTOR2);
+    analogWrite(pins_motor2[1], BRAKE_MOTOR2);
   }
-  //Serial.println(motorB_val);
+  //Serial.println(motor1_val);
 #endif
 }
 

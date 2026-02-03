@@ -37,7 +37,7 @@
 // 64 = 976Hz(default)
 // 8 = 7812Hz
 // 1 = 62500Hz
-#define PWM_MOTOR_A  64
+#define PWM_MOTOR1  64
 
 // Pin D9 and D10 (16-bit Timer/Counter 1, Servo library)
 // 1024 = 30Hz
@@ -45,7 +45,7 @@
 // 64 = 488Hz(default)
 // 8 = 3906Hz
 // 1 = 31250Hz
-//#define PWM_MOTOR_B  256
+//#define PWM_MOTOR2  256
 
 // Pin D3 and D11 (8-bit Timer/Counter 2, ServoTimer2, Tone library)
 // 1024 = 30Hz
@@ -55,7 +55,7 @@
 // 32 = 976Hz
 // 8 = 3906Hz
 // 1 = 31250Hz
-#define PWM_MOTOR_B  64
+#define PWM_MOTOR2  64
 
 // Pin D0(RX) (328PB 16-bit Timer/Counter 3)
 // 1024 = 30Hz
@@ -63,7 +63,7 @@
 // 64 = 488Hz(default)
 // 8 = 3906Hz
 // 1 = 31250Hz
-//#define PWM_MOTOR_A  64
+//#define PWM_MOTOR1  64
 
 // Pin D1(TX) and D2 (328PB 16-bit Timer/Counter 4)
 // 1024 = 30Hz
@@ -71,21 +71,21 @@
 // 64 = 488Hz(default)
 // 8 = 3906Hz
 // 1 = 31250Hz
-//#define PWM_MOTOR_B  64
+//#define PWM_MOTOR2  64
 
 // Setting the reaction of the motor to be rotated after the lever has been moved. Settings (0-255)
-#define ACCELERATE_MOTOR_A  0
-#define ACCELERATE_MOTOR_B  0
+#define ACCELERATE_MOTOR1  0
+#define ACCELERATE_MOTOR2  0
 
 // Setting the maximum motor power. Suitable for TX transmitters without endpoint setting. Settings (0-255)
-#define MAX_FORWARD_MOTOR_A  255
-#define MAX_REVERSE_MOTOR_A  255
-#define MAX_FORWARD_MOTOR_B  255
-#define MAX_REVERSE_MOTOR_B  255
+#define MAX_FORWARD_MOTOR1  255
+#define MAX_REVERSE_MOTOR1  255
+#define MAX_FORWARD_MOTOR2  255
+#define MAX_REVERSE_MOTOR2  255
 
 // Brake setting, no brake 0, maximum brake 255. Settings (0-255)
-#define BRAKE_MOTOR_A  0
-#define BRAKE_MOTOR_B  0
+#define BRAKE_MOTOR1  0
+#define BRAKE_MOTOR2  0
 
 // Setting the dead zone of poor quality joysticks TX for the motor controller
 #define DEAD_ZONE        15
@@ -98,31 +98,31 @@
 // Uncomment only one output option that combines motors, servos and pins.
 // (e.g. uncomment only output for 1 motor, no output for servos)
 //*********************************************************************************************************************
-//#define MOTOR_A
-//#define MOTOR_B
+//#define MOTOR1
+//#define MOTOR2
 //#define SERVO_8CH
-//#define SERVO_7CH_MOTOR_A
-//#define SERVO_7CH_MOTOR_B
-#define SERVO_6CH_MOTOR_AB
+//#define SERVO_7CH_MOTOR1
+//#define SERVO_7CH_MOTOR2
+#define SERVO_6CH_MOTOR12
 
 #if defined(SERVO_8CH)
   #define SERVO_CHANNELS  8
 #endif
 
-#if defined(SERVO_7CH_MOTOR_A)
+#if defined(SERVO_7CH_MOTOR1)
   #define SERVO_CHANNELS  7
-  #define MOTOR_A
+  #define MOTOR1
 #endif
 
-#if defined(SERVO_7CH_MOTOR_B)
+#if defined(SERVO_7CH_MOTOR2)
   #define SERVO_CHANNELS  7
-  #define MOTOR_B
+  #define MOTOR2
 #endif
 
-#if defined(SERVO_6CH_MOTOR_AB)
+#if defined(SERVO_6CH_MOTOR12)
   #define SERVO_CHANNELS  6
-  #define MOTOR_A
-  #define MOTOR_B
+  #define MOTOR1
+  #define MOTOR2
 #endif
 
 #define MAX_RC_CHANNELS   16 // The maximum number of RC channels that can be sent in one packet
