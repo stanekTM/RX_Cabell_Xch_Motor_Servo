@@ -24,13 +24,12 @@
   along with RC_RX_CABELL_V3_FHSS.  If not, see http://www.gnu.org/licenses.
 */
 
-#include <Arduino.h>
 #include "RX.h"
 #include "Pins.h"
 #include "My_RF24.h"
 #include "My_nRF24L01.h"
 #include "RSSI.h"
-#include "Rx_Tx_Util.h"
+#include "RX_TX_Util.h"
 #include <EEPROM.h>
 #include <Servo.h>     // v1.2.2
 #include <DigitalIO.h> // v1.0.1

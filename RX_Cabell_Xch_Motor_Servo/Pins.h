@@ -24,8 +24,8 @@
   along with RC_RX_CABELL_V3_FHSS.  If not, see http://www.gnu.org/licenses.
 */
 
-#ifndef __have__RC_RX_PINS_h__
-#define __have__RC_RX_PINS_h__
+#ifndef __Pins_h__
+#define __Pins_h__
 
 #include <Arduino.h>
 #include "RX.h"
@@ -118,5 +118,5 @@ const byte pins_servo[] = {2, 4, 7, 8, 9, 10};
 #define RADIO_IRQ_SET_PULLUP   RADIO_IRQ_port |= RADIO_IRQ_PIN_MASK
 #define IS_RADIO_IRQ_on        ((RADIO_IRQ_ipr & RADIO_IRQ_PIN_MASK) == 0x00)
 
-#endif
+#endif // End __Pins_h__
  

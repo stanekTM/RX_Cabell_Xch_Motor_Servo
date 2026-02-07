@@ -24,8 +24,8 @@
   along with RC_RX_CABELL_V3_FHSS.  If not, see http://www.gnu.org/licenses.
 */
 
-#ifndef __have__RSSI_h__
-#define __have__RSSI_h__
+#ifndef __RSSI_h__
+#define __RSSI_h__
 
 #include <Arduino.h>
 
@@ -62,5 +62,5 @@ class RSSI
   int8_t sequentialMissTrack = 0;
 };
 
-#endif
+#endif // End __RSSI_h__
  

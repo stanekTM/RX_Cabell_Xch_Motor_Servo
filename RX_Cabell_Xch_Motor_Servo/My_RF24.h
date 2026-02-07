@@ -15,10 +15,10 @@
  * Class declaration for RF24 and helper enums
  */
 
-#ifndef __RF24_H__
-#define __RF24_H__
+#ifndef __My_RF24_h__
+#define __My_RF24_h__
 
-#include "My_RF24_config.h"
+#include "My_RF24_Config.h"
 
 #if defined (RF24_LINUX) || defined (LITTLEWIRE)
   #include <utility/includes.h>
@@ -1999,5 +1999,5 @@ private:
  *<br><br><br>
  */
 
-#endif // __RF24_H__
+#endif // End __My_RF24_h__
  

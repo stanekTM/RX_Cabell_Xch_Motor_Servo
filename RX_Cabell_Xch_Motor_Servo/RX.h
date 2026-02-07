@@ -24,54 +24,11 @@
   along with RC_RX_CABELL_V3_FHSS.  If not, see http://www.gnu.org/licenses.
 */
 
-#ifndef __have__RC_RX_TX_RX_h__
-#define __have__RC_RX_TX_RX_h__
+#ifndef __RX_h__
+#define __RX_h__
 
 #include <Arduino.h>
 #include "My_RF24.h"
-
-// Setting PWM
-// Pin D5 and D6 (8-bit Timer/Counter 0, functions delay, millis, micros and delayMicroseconds)
-// 1024 = 61Hz
-// 256 = 244Hz
-// 64 = 976Hz(default)
-// 8 = 7812Hz
-// 1 = 62500Hz
-#define PWM_TIMER0_5_6  64
-
-// Pin D9 and D10 (16-bit Timer/Counter 1, Servo library)
-// 1024 = 30Hz
-// 256 = 122Hz
-// 64 = 488Hz(default)
-// 8 = 3906Hz
-// 1 = 31250Hz
-//#define PWM_TIMER1_9_10  64
-
-// Pin D3 and D11 (8-bit Timer/Counter 2, ServoTimer2, Tone library)
-// 1024 = 30Hz
-// 256 = 122Hz
-// 128 = 244Hz
-// 64 = 488Hz(default)
-// 32 = 976Hz
-// 8 = 3906Hz
-// 1 = 31250Hz
-#define PWM_TIMER2_3_11  64
-
-// Pin D0(RX) (328PB 16-bit Timer/Counter 3)
-// 1024 = 30Hz
-// 256 = 122Hz
-// 64 = 488Hz(default)
-// 8 = 3906Hz
-// 1 = 31250Hz
-//#define PWM_TIMER3_0  64
-
-// Pin D1(TX) and D2 (328PB 16-bit Timer/Counter 4)
-// 1024 = 30Hz
-// 256 = 122Hz
-// 64 = 488Hz(default)
-// 8 = 3906Hz
-// 1 = 31250Hz
-//#define PWM_TIMER4_1_2  64
 
 // Setting the reaction of the motor to be rotated after the lever has been moved. Settings (0-255)
 #define ACCELERATE_MOTOR1  0
@@ -205,5 +162,5 @@ bool failSafeButtonHeld();
 void setTelemetryPowerMode(uint8_t option);
 void initializeRadio();
 
-#endif
+#endif // End __RX_h__
  

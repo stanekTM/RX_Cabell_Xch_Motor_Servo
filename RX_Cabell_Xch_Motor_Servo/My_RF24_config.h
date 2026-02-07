@@ -14,8 +14,8 @@
   Added __ARDUINO_X86__ support
 */
 
-#ifndef __RF24_CONFIG_H__
-#define __RF24_CONFIG_H__
+#ifndef __My_RF24_Config_h__
+#define __My_RF24_Config_h__
 
   /*** USER DEFINES:  ***/  
   //#define FAILURE_HANDLING
@@ -159,5 +159,5 @@
 
 #endif
 
-#endif // __RF24_CONFIG_H__
+#endif // End __My_RF24_Config_h__
  

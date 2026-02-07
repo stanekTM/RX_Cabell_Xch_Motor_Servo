@@ -24,7 +24,6 @@
   along with RC_RX_CABELL_V3_FHSS.  If not, see http://www.gnu.org/licenses.
 */
 
-#include <Arduino.h>
 #include "RSSI.h"
 
 //--------------------------------------------------------------------------------------------------------------------------

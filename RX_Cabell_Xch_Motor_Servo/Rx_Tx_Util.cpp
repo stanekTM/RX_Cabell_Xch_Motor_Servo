@@ -24,8 +24,7 @@
   along with RC_RX_CABELL_V3_FHSS.  If not, see http://www.gnu.org/licenses.
 */
 
-#include <Arduino.h>
-#include "Rx_Tx_Util.h"
+#include "RX_TX_Util.h"
 #include "RX.h"
 
 //--------------------------------------------------------------------------------------------------------------------------
