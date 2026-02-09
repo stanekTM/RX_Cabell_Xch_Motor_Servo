@@ -6,8 +6,7 @@ Hardware includes nRF24L01+ transceiver, ATmega328P/PB processor and motor drive
 The motor driver IC is based on MX1208, MX1508, MX1515, MX1616, MX1919 and others similar, which uses 4x PWM input control signals.
 
 ### Works with RC transmitters
-[**OpenAVRc**](https://github.com/Ingwie/OpenAVRc_Dev)
-[**Multiprotocol**](https://github.com/pascallanger/DIY-Multiprotocol-TX-Module).
+[**OpenAVRc**](https://github.com/Ingwie/OpenAVRc_Dev) and [**Multiprotocol**](https://github.com/pascallanger/DIY-Multiprotocol-TX-Module).
 
 I recommend reducing the number of channels as much as possible based on what your model requires.
 Fewer channels will use a smaller packet size, which improves transmission reliability (fewer bytes sent means less opportunity for errors).
